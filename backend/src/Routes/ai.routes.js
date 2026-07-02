@@ -9,4 +9,4 @@ AiRouter.post('/interview-prep',AuthMiddleware,interviewPrep);
 
 
 
-module.exports = AiRouter;
+module.exports =  AiRouter;

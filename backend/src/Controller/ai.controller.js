@@ -1,7 +1,7 @@
 const express = require('express');
 const { ResumeScore,interviewPrepHelp } = require('../services/AI.services')
 
-const matchResumeScore = async (req, res) => {
+const matchResumeScore =  async (req, res) => {
     try {
         const { jobDescription, resumeText } = req.body;
         if(!jobDescription || !resumeText) {

@@ -67,4 +67,4 @@ const interviewPrepHelp = async (companyName, roleTitle) => {
 }
 
 
-module.exports = { ResumeScore, interviewPrepHelp };
+module.exports =  { ResumeScore, interviewPrepHelp };

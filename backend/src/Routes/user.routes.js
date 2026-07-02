@@ -8,4 +8,4 @@ AuthRouter.post('/signup',signup);
 AuthRouter.post('/logout',logout);
 
 
-module.exports = AuthRouter;
+module.exports =  AuthRouter;

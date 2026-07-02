@@ -12,4 +12,4 @@ ApplicationRouter.put('/update/:id', AuthMiddileware, updateApplication);
 ApplicationRouter.delete('/delete/:id', AuthMiddileware, deleteApplication); 
 
 
-module.exports = ApplicationRouter;
+module.exports =  ApplicationRouter;
