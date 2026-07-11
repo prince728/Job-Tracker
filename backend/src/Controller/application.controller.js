@@ -33,7 +33,7 @@ const createApplication = async (req, res) => {
 
         res.status(201).json({
             message: "Application created successfully",
-            Application: application
+            application: application
         });
 
     } catch (error) {
