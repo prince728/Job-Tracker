@@ -56,6 +56,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) {
             return res.status(400).json({
@@ -95,14 +96,14 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        const {token} = req.cookies ;
-        if(!token){
+        const { token } = req.cookies;
+        if (!token) {
             return res.status(200).json({
-                message:"User already logout"
+                message: "User already logout"
             })
         }
 
-        res.clearCookie("token",{
+        res.clearCookie("token", {
             httpOnly: true,
             secure: false,
             sameSite: "lax"
@@ -120,5 +121,27 @@ const logout = async (req, res) => {
     }
 }
 
+const getme = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            }, select: { id: true, name: true, email: true, createdAt: true }
+        });
 
-module.exports = { signup, login,logout };
+        return res.status(200).json({
+            message: "User detail fetched successfully",
+            user
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Server error'
+        });
+    }
+}
+
+
+module.exports = { signup, login, logout, getme };
