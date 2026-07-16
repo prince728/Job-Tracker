@@ -1,5 +1,5 @@
-// src/components/Navbar.jsx
 import React from "react";
+import { Link } from "react-router-dom";   
 import { useAuth } from "../context/AuthContext"; 
 
 export default function Navbar() {
@@ -11,7 +11,32 @@ export default function Navbar() {
         Job Application
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-6">
+        <Link
+          to="/"
+          className="text-gray-200 hover:text-indigo-400 transition font-medium"
+        >
+          Home
+        </Link>
+        <Link
+          to="/match-score"
+          className="text-gray-200 hover:text-indigo-400 transition font-medium"
+        >
+          Match Score
+        </Link>
+        <Link
+          to="/interview-prep"
+          className="text-gray-200 hover:text-indigo-400 transition font-medium"
+        >
+          Interview Prep
+        </Link>
+        <Link
+          to="/dashboard"
+          className="text-gray-200 hover:text-indigo-400 transition font-medium"
+        >
+          dashboard
+        </Link>
+
         {user && (
           <span className="text-gray-200">
             {user.name}
