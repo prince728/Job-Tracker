@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function ApplicationForm({ onClose, onSubmit, defaultValues }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
@@ -10,8 +11,18 @@ export default function ApplicationForm({ onClose, onSubmit, defaultValues }) {
     defaultValues: defaultValues || {},
   });
 
-  const submitHandler = (data) => {
-    onSubmit(data);
+  const submitHandler = async (data) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -119,9 +130,10 @@ export default function ApplicationForm({ onClose, onSubmit, defaultValues }) {
             </button>
             <button
               type="submit"
+              disabled={isSubmitting}
               className="px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
             >
-              Save
+              {isSubmitting ? "Submitting..." : defaultValues ? "Update" : "Add"}
             </button>
           </div>
         </form>
