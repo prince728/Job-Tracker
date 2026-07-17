@@ -1,6 +1,7 @@
 const express = require('express');
 const prisma = require('../../prisma/client');
 const { Prisma } = require('@prisma/client');
+const redis = require('../config/redis');
 
 
 
@@ -30,6 +31,7 @@ const createApplication = async (req, res) => {
             data: { companyName, roleTitle, status, dateApplied: new Date(dateApplied), jobLink, notes, userId }
         });
 
+        await redis.del(`dashboard:${userId}`);
 
         res.status(201).json({
             message: "Application created successfully",
@@ -80,7 +82,14 @@ const getAllApplication = async (req, res) => {
     try {
         const userId = req.userId;
 
-        const applications = await prisma.application.findMany({ where: { userId } });
+        let applications =await redis.get(`dashboard:${userId}`);
+        if(!applications){
+            applications = await prisma.application.findMany({ where: { userId } });
+            await redis.setex(`dashboard:${userId}`, 60, JSON.stringify(applications));
+        }
+        else{
+            applications=JSON.parse(applications);
+        }
 
         return res.status(200).json({
             message: "User all application fetch successfully",
@@ -126,6 +135,7 @@ const updateApplication = async (req, res) => {
             }
         })
 
+        await redis.del(`dashboard:${userId}`);
 
         return res.status(200).json({
             message: "Application updated successfully",
@@ -155,6 +165,8 @@ const deleteApplication = async (req, res) => {
         const userId = req.userId;
 
         const application = await prisma.application.delete({where:{id:parseInt(id,10),userId}});
+
+        await redis.del(`dashboard:${userId}`);
 
         return res.status(200).json({
             message: "Application deleted successfully",

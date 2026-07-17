@@ -1,5 +1,5 @@
 const express = require('express');
-const { ResumeScore,interviewPrepHelp } = require('../services/AI.services')
+const { ResumeScore,interviewPrepHelp } = require('../services/AI.services');
 
 const matchResumeScore =  async (req, res) => {
     try {
