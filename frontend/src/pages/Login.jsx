@@ -7,7 +7,8 @@ import { login as loginApi } from "../services/authApi";
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [error, setError] = useState(null);
+
+  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const {
@@ -17,83 +18,140 @@ export default function LoginPage() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-    setError(null);
+    if (loading) return;
+
     setLoading(true);
+    setServerError("");
+
     try {
-      const response = await loginApi(email, password);
+      const response = await loginApi(data.email, data.password);
+
       login(response.user);
       navigate("/");
-    } catch (error) {
-      setError(error.response?.data?.message || "Login failed");
+    } catch (err) {
+      console.error(err);
+
+      setServerError(
+        err.response?.data?.message ||
+          "Unable to login. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-white">Login</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="flex min-h-screen items-center justify-center bg-gray-900 px-4">
+      <div className="w-full max-w-md rounded-xl border border-gray-700 bg-gray-800 p-8 shadow-2xl">
+
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-white">
+            Welcome Back
+          </h1>
+
+          <p className="mt-2 text-gray-400">
+            Sign in to continue
+          </p>
+        </div>
+
+        {serverError && (
+          <div className="mb-5 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3">
+            <p className="text-sm font-medium text-red-300">
+              {serverError}
+            </p>
+          </div>
+        )}
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5"
+        >
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-300">
               Email
             </label>
+
             <input
               type="email"
+              placeholder="you@example.com"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
                   value: /^[^@ ]+@[^@ ]+\.[^@ ]+$/,
                   message: "Invalid email address",
                 },
+                onChange: () => setServerError(""),
               })}
-              className="w-full px-3 py-2 mt-1 text-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="you@example.com"
+              className={`w-full rounded-lg border bg-gray-700 px-4 py-3 text-white placeholder-gray-400 outline-none transition
+              ${
+                errors.email
+                  ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                  : "border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              }`}
             />
+
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+              <p className="mt-2 text-sm text-red-400">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="mb-2 block text-sm font-medium text-gray-300">
               Password
             </label>
+
             <input
               type="password"
+              placeholder="••••••••"
               {...register("password", {
                 required: "Password is required",
                 minLength: {
                   value: 6,
                   message: "Password must be at least 6 characters",
                 },
+                onChange: () => setServerError(""),
               })}
-              className="w-full px-3 py-2 mt-1 text-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="••••••••"
+              className={`w-full rounded-lg border bg-gray-700 px-4 py-3 text-white placeholder-gray-400 outline-none transition
+              ${
+                errors.password
+                  ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                  : "border-gray-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              }`}
             />
+
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+              <p className="mt-2 text-sm text-red-400">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           <button
             type="submit"
-            className="w-full py-2 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400"
+            disabled={loading}
+            className={`w-full rounded-lg py-3 font-semibold transition ${
+              loading
+                ? "cursor-not-allowed bg-gray-600 text-gray-300"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-
-        <p className="text-sm text-center text-gray-400">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-indigo-400 hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <div className="mt-6 text-center">
+          <p className="text-gray-400">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
