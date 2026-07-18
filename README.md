@@ -82,7 +82,7 @@ A full-stack web application to track your internship and job applications with 
 ---
 
 ## 🏗️ Project Structure
-
+```
 job-tracker/
 ├── frontend/
 │   ├── public/
@@ -135,7 +135,7 @@ job-tracker/
 ├── docker-compose.yml
 └── README.md
 
-
+```
 
 ---
 
