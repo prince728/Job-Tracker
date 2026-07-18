@@ -72,7 +72,7 @@ export default function ResumeScore() {
         <div className="mt-10 space-y-6">
           <p className="text-xl font-bold">
             Match Score:{" "}
-            <span className="text-indigo-400">{result.score}%</span>
+            <span className="text-indigo-400">{result.matchScore}%</span>
           </p>
 
           <div>
