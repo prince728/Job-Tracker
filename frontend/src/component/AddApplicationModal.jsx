@@ -131,7 +131,7 @@ export default function ApplicationForm({ onClose, onSubmit, defaultValues }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+              className="px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer"
             >
               {isSubmitting ? "Submitting..." : defaultValues ? "Update" : "Add"}
             </button>

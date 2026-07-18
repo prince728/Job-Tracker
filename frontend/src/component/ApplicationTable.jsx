@@ -47,13 +47,13 @@ export default function ApplicationsTable({ applications, onEdit, onDelete }) {
               <td className="px-4 py-2 space-x-2">
                 <button
                   onClick={() => onEdit(app)}
-                  className="px-2 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+                  className="px-2 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => onDelete(app)}
-                  className="px-2 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
+                  className="px-2 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer"
                 >
                   Delete
                 </button>
